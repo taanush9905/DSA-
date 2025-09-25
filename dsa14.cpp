@@ -1,29 +1,66 @@
-//Write a program to insert an element in a sorted array so that the sequence remains sorted.
+//Create a circular linked list with college data and perform insertion at the front and deletion at the end.
 #include <iostream>
 using namespace std;
 
-int main() {
-    int arr[100], n, value, pos;
-    cout << "Enter size of sorted array: ";
-    cin >> n;
-    cout << "Enter elements in sorted order: ";
-    for (int i = 0; i < n; i++)
-        cin >> arr[i];
-    cout << "Enter value to insert: ";
-    cin >> value;
-    pos = n;
-    for (int i = 0; i < n; i++)
-        if (value < arr[i]) {
-            pos = i;
-            break;
+struct CNode {
+    string college;
+    CNode* next;
+};
+
+class CircularList {
+    CNode* head;
+public:
+    CircularList() { head = NULL; }
+    
+    void insertFront(string name) {
+        CNode* newnode = new CNode;
+        newnode->college = name;
+        if (head == NULL) {
+            head = newnode;
+            newnode->next = newnode;
+            return;
         }
-    for (int i = n; i > pos; i--)
-        arr[i] = arr[i-1];
-    arr[pos] = value;
-    n++;
-    cout << "New array: ";
-    for (int i = 0; i < n; i++)
-        cout << arr[i] << " ";
-    cout << endl;
+        CNode* temp = head;
+        while (temp->next != head)
+            temp = temp->next;
+        newnode->next = head;
+        temp->next = newnode;
+        head = newnode;
+    }
+
+    void deleteEnd() {
+        if (head == NULL) return;
+        if (head->next == head) {
+            delete head;
+            head = NULL;
+            return;
+        }
+        CNode* temp = head;
+        while (temp->next->next != head)
+            temp = temp->next;
+        CNode* last = temp->next;
+        temp->next = head;
+        delete last;
+    }
+
+    void display() {
+        if (head == NULL) return;
+        CNode* temp = head;
+        do {
+            cout << temp->college << " ";
+            temp = temp->next;
+        } while (temp != head);
+        cout << endl;
+    }
+};
+
+int main() {
+    CircularList c;
+    c.insertFront("CollegeA");
+    c.insertFront("CollegeB");
+    c.insertFront("CollegeC");
+    c.display();
+    c.deleteEnd();
+    c.display();
     return 0;
 }
