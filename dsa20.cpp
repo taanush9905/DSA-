@@ -1,28 +1,66 @@
-//Write a program to subtract one matrix from 
+//Create a linear queue using linked list and implement enqueue, dequeue, and display operations.
 #include <iostream>
 using namespace std;
 
-int main() {
-    int mat1[10][10], mat2[10][10], res[10][10];
-    int r, c;
-    cout << "Enter rows and columns for matrix: ";
-    cin >> r >> c;
-    cout << "Enter first matrix elements:" << endl;
-    for (int i = 0; i < r; i++)
-        for (int j = 0; j < c; j++)
-            cin >> mat1[i][j];
-    cout << "Enter second matrix elements:" << endl;
-    for (int i = 0; i < r; i++)
-        for (int j = 0; j < c; j++)
-            cin >> mat2[i][j];
-    for (int i = 0; i < r; i++)
-        for (int j = 0; j < c; j++)
-            res[i][j] = mat1[i][j] - mat2[i][j];
-    cout << "Difference of matrices:" << endl;
-    for (int i = 0; i < r; i++) {
-        for (int j = 0; j < c; j++)
-            cout << res[i][j] << " ";
+struct Node {
+    int data;
+    Node* next;
+};
+
+class Queue {
+    Node *front, *rear;
+public:
+    Queue() { front = rear = NULL; }
+
+    void enqueue(int val){
+        Node* newNode = new Node;
+        newNode->data = val;
+        newNode->next = NULL;
+        if(rear == NULL){
+            front = rear = newNode;
+            cout << val << " inserted into queue\n";
+            return;
+        }
+        rear->next = newNode;
+        rear = newNode;
+        cout << val << " inserted into queue\n";
+    }
+
+    void dequeue(){
+        if(front == NULL){
+            cout << "Queue Underflow\n";
+            return;
+        }
+        Node* temp = front;
+        cout << "Deleted element: " << front->data << endl;
+        front = front->next;
+        if(front == NULL){
+            rear = NULL;
+        }
+        delete temp;
+    }
+
+    void display(){
+        if(front == NULL){
+            cout << "Queue is Empty\n";
+            return;
+        }
+        Node* temp = front;
+        cout << "Queue elements: ";
+        while(temp){
+            cout << temp->data << " ";
+            temp = temp->next;
+        }
         cout << endl;
     }
+};
+
+int main() {
+    Queue q;
+    q.enqueue(10);
+    q.enqueue(20);
+    q.display();
+    q.dequeue();
+    q.display();
     return 0;
 }
