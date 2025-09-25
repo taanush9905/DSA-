@@ -1,30 +1,84 @@
-//Write a program to find the second largest and second smallest elements in an array
+//Remove a loop from a linked list if it exists.
 #include <iostream>
 using namespace std;
 
-int main() {
-    int arr[100], n;
-    cout << "Enter size of array: ";
-    cin >> n;
-    cout << "Enter elements: ";
-    for (int i = 0; i < n; i++)
-        cin >> arr[i];
+struct Node {
+    int data;
+    Node* next;
+};
 
-    int max = arr[0], min = arr[0], secMax = arr[0], secMin = arr[0];
-    for (int i = 1; i < n; i++) {
-        if (arr[i] > max) {
-            secMax = max;
-            max = arr[i];
-        } else if (arr[i] > secMax && arr[i] != max)
-            secMax = arr[i];
+Node* head = NULL;
 
-        if (arr[i] < min) {
-            secMin = min;
-            min = arr[i];
-        } else if (arr[i] < secMin && arr[i] != min)
-            secMin = arr[i];
+void insert(int val) {
+    Node* temp = new Node{val, NULL};
+    if (!head) {
+        head = temp;
+        return;
     }
-    cout << "Second Largest: " << secMax << endl;
-    cout << "Second Smallest: " << secMin << endl;
+    Node* p = head;
+    while (p->next)
+        p = p->next;
+    p->next = temp;
+}
+
+bool detectAndRemoveLoop() {
+    Node *slow = head, *fast = head;
+    while (fast && fast->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+        if (slow == fast) {
+            slow = head;
+            while (slow->next != fast->next) {
+                slow = slow->next;
+                fast = fast->next;
+            }
+            fast->next = NULL;
+            return true;
+        }
+    }
+    return false;
+}
+
+void display() {
+    Node* temp = head;
+    while (temp) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+    cout << endl;
+}
+
+int main() {
+    int n, val, loopPos;
+    cout << "Enter number of nodes: ";
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        cout << "Enter data for node " << i + 1 << ": ";
+        cin >> val;
+        insert(val);
+    }
+    cout << "Create loop? (0-No, 1-Yes): ";
+    int choice; cin >> choice;
+    if(choice){
+        cout << "Enter node position to link last node to: ";
+        cin >> loopPos;
+        Node* temp = head;
+        Node* loopNode = NULL;
+        int count = 1;
+        while(temp->next){
+            if(count == loopPos) loopNode = temp;
+            temp = temp->next;
+            count++;
+        }
+        if(loopNode)
+            temp->next = loopNode;
+    }
+    if(detectAndRemoveLoop()){
+        cout << "Loop detected and removed.\n";
+    } else {
+        cout << "No loop found.\n";
+    }
+    cout << "Linked list after removing loop (if any): ";
+    display();
     return 0;
 }
