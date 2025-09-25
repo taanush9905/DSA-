@@ -1,17 +1,71 @@
-//Write a program to find the sum of the diagonal elements of a matrix
+//Segregate even and odd nodes in a linked list — even nodes followed by odd nodes.
 #include <iostream>
 using namespace std;
 
+struct Node {
+    int data;
+    Node* next;
+};
+
+Node* head = NULL;
+
+void insert(int val) {
+    Node* temp = new Node{val, NULL};
+    if (!head) {
+        head = temp;
+        return;
+    }
+    Node* p = head;
+    while(p->next) p = p->next;
+    p->next = temp;
+}
+
+void segregateEvenOdd() {
+    Node *evenStart = NULL, *evenEnd = NULL, *oddStart = NULL, *oddEnd = NULL, *curr = head;
+    while(curr){
+        if(curr->data % 2 == 0){
+            if(!evenStart) evenStart = evenEnd = curr;
+            else {
+                evenEnd->next = curr;
+                evenEnd = curr;
+            }
+        } else {
+            if(!oddStart) oddStart = oddEnd = curr;
+            else {
+                oddEnd->next = curr;
+                oddEnd = curr;
+            }
+        }
+        curr = curr->next;
+    }
+    if(!evenStart || !oddStart) return;
+    evenEnd->next = oddStart;
+    oddEnd->next = NULL;
+    head = evenStart;
+}
+
+void display() {
+    Node* p = head;
+    while(p){
+        cout << p->data << " ";
+        p = p->next;
+    }
+    cout << endl;
+}
+
 int main() {
-    int mat[10][10], n, sum = 0;
-    cout << "Enter size of matrix: ";
+    int n, val;
+    cout << "Enter number of nodes: ";
     cin >> n;
-    cout << "Enter matrix elements:" << endl;
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
-            cin >> mat[i][j];
-    for (int i = 0; i < n; i++)
-        sum += mat[i][i];
-    cout << "Sum of diagonal elements: " << sum << endl;
+    for(int i=0; i<n; i++){
+        cout << "Enter data for node " << i+1 << ": ";
+        cin >> val;
+        insert(val);
+    }
+    cout << "Original list: ";
+    display();
+    segregateEvenOdd();
+    cout << "After segregation (Even nodes followed by Odd nodes): ";
+    display();
     return 0;
 }
