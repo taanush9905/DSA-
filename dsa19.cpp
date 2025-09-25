@@ -1,28 +1,66 @@
-//Write a program to add two matrices
+//Implement push, pop, peek, and traverse operations on stack using linked list.
 #include <iostream>
 using namespace std;
 
-int main() {
-    int mat1[10][10], mat2[10][10], res[10][10];
-    int r, c;
-    cout << "Enter rows and columns for matrix: ";
-    cin >> r >> c;
-    cout << "Enter first matrix elements:" << endl;
-    for (int i = 0; i < r; i++)
-        for (int j = 0; j < c; j++)
-            cin >> mat1[i][j];
-    cout << "Enter second matrix elements:" << endl;
-    for (int i = 0; i < r; i++)
-        for (int j = 0; j < c; j++)
-            cin >> mat2[i][j];
-    for (int i = 0; i < r; i++)
-        for (int j = 0; j < c; j++)
-            res[i][j] = mat1[i][j] + mat2[i][j];
-    cout << "Sum of matrices:" << endl;
-    for (int i = 0; i < r; i++) {
-        for (int j = 0; j < c; j++)
-            cout << res[i][j] << " ";
+struct Node {
+    int data;
+    Node* next;
+};
+
+class Stack {
+    Node* top;
+public:
+    Stack() { top = NULL; }
+
+    void push(int val){
+        Node* newNode = new Node;
+        newNode->data = val;
+        newNode->next = top;
+        top = newNode;
+        cout << val << " pushed into stack\n";
+    }
+
+    void pop(){
+        if(top == NULL){
+            cout << "Stack Underflow\n";
+            return;
+        }
+        Node* temp = top;
+        cout << "Popped element: " << top->data << endl;
+        top = top->next;
+        delete temp;
+    }
+
+    void peek(){
+        if(top == NULL){
+            cout << "Stack is Empty\n";
+            return;
+        }
+        cout << "Top element is: " << top->data << endl;
+    }
+
+    void traverse(){
+        if(top == NULL){
+            cout << "Stack is Empty\n";
+            return;
+        }
+        Node* temp = top;
+        cout << "Stack elements: ";
+        while(temp){
+            cout << temp->data << " ";
+            temp = temp->next;
+        }
         cout << endl;
     }
+};
+
+int main() {
+    Stack st;
+    st.push(10);
+    st.push(20);
+    st.display();
+    st.pop();
+    st.peek();
+    st.traverse();
     return 0;
 }
