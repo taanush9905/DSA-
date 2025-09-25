@@ -1,39 +1,72 @@
-//Write a program to multiply two matrices
+//implement two stacks using a single array.
 #include <iostream>
+#define MAX 100
+
 using namespace std;
 
-int main() {
-    int mat1[10][10], mat2[10][10], res[10][10];
-    int r1, c1, r2, c2, sum;
-    cout << "Enter rows and columns for first matrix: ";
-    cin >> r1 >> c1;
-    cout << "Enter rows and columns for second matrix: ";
-    cin >> r2 >> c2;
-    if (c1 != r2) {
-        cout << "Matrix multiplication not possible." << endl;
-        return 0;
+class TwoStacks {
+    int arr[MAX];
+    int top1, top2;
+public:
+    TwoStacks() {
+        top1 = -1;
+        top2 = MAX;
     }
-    cout << "Enter first matrix elements:" << endl;
-    for (int i = 0; i < r1; i++)
-        for (int j = 0; j < c1; j++)
-            cin >> mat1[i][j];
-    cout << "Enter second matrix elements:" << endl;
-    for (int i = 0; i < r2; i++)
-        for (int j = 0; j < c2; j++)
-            cin >> mat2[i][j];
-
-    for (int i = 0; i < r1; i++)
-        for (int j = 0; j < c2; j++) {
-            sum = 0;
-            for (int k = 0; k < c1; k++)
-                sum += mat1[i][k] * mat2[k][j];
-            res[i][j] = sum;
+    void push1(int x){
+        if(top1 < top2 - 1){
+            arr[++top1] = x;
+        } else {
+            cout << "Stack Overflow in Stack 1\n";
         }
-    cout << "Result matrix:" << endl;
-    for (int i = 0; i < r1; i++) {
-        for (int j = 0; j < c2; j++)
-            cout << res[i][j] << " ";
-        cout << endl;
     }
+    void push2(int x){
+        if(top1 < top2 - 1){
+            arr[--top2] = x;
+        } else {
+            cout << "Stack Overflow in Stack 2\n";
+        }
+    }
+    void pop1(){
+        if(top1 >= 0){
+            cout << "Popped element from Stack 1: " << arr[top1--] << endl;
+        } else {
+            cout << "Stack Underflow in Stack 1\n";
+        }
+    }
+    void pop2(){
+        if(top2 < MAX){
+            cout << "Popped element from Stack 2: " << arr[top2++] << endl;
+        } else {
+            cout << "Stack Underflow in Stack 2\n";
+        }
+    }
+    void display1(){
+        if(top1 >=0){
+            cout << "Stack 1 elements: ";
+            for(int i=0;i<=top1;i++){
+                cout << arr[i] << " ";
+            }
+            cout << endl;
+        } else cout << "Stack 1 is Empty\n";
+    }
+    void display2(){
+        if(top2 < MAX){
+            cout << "Stack 2 elements: ";
+            for(int i=MAX-1;i>=top2;i--){
+                cout << arr[i] << " ";
+            }
+            cout << endl;
+        } else cout << "Stack 2 is Empty\n";
+    }
+};
+
+int main() {
+    TwoStacks ts;
+    ts.push1(10);
+    ts.push2(20);
+    ts.display1();
+    ts.display2();
+    ts.pop1();
+    ts.pop2();
     return 0;
 }
